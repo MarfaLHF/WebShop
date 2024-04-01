@@ -1,0 +1,38 @@
+﻿@model WebShop.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details - @Model.OrderID</h1>
+
+<p>Order Date: @Model.OrderDate</p>
+<p>Status: @Model.Status</p>
+<p>Total Amount: @Model.TotalAmount</p>
+
+<h2>Order Items</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>
+                    @item.Product.ProductName
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @item.Price
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+﻿@model WebShop.Data.CartViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Shopping Cart</h1>
+
+@if (Model.Items?.Any() != true)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price</td>
+                    <td>
+                        @item.Quantity
+                        <form asp-controller="Products" asp-action="DecrementItemQuantity" method="post">
+                            <input type="hidden" name="productId" value="@item.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">-</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-controller="Products" asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="productId" value="@item.ProductID" />
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <p>Total Price: @Model.TotalPrice</p>
+    <form asp-controller="Products" asp-action="CreateOrder" method="post">
+        <button type="submit" class="btn btn-primary">Create Order</button>
+    </form>
+}
+
+
