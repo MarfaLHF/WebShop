@@ -134,7 +134,6 @@ namespace WebShop.Data
                 }
             }
 
-            await context.SaveChangesAsync();
 
             await context.SaveChangesAsync();
         }
