@@ -55,6 +55,7 @@ namespace WebShop.Data
             // Создание пользователя с ролью администратора
             var adminUser = new IdentityUser
             {
+                Id = "1",
                 UserName = "admin@mail.ru",
                 Email = "admin@mail.ru",
                 NormalizedUserName = "ADMIN@MAIL.RU",
@@ -80,6 +81,60 @@ namespace WebShop.Data
                     });
                 }
             }
+            await context.SaveChangesAsync();
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == "1");
+            if (user != null)
+            {
+                var adminRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
+                if (adminRole != null)
+                {
+                    var userRole = new IdentityUserRole<string>
+                    {
+                        RoleId = adminRole.Id,
+                        UserId = user.Id
+                    };
+
+                    if (!context.UserRoles.Any(ur => ur.RoleId == userRole.RoleId && ur.UserId == userRole.UserId))
+                    {
+                        context.UserRoles.Add(userRole);
+                        await context.SaveChangesAsync();
+                    }
+                }
+            }
+            var products = new List<Product>
+    {
+        new Product
+        {
+            ProductName = "Product 1",
+            Description = "Description for Product 1",
+            Price = 100,
+            QuantityInStock = 50
+        },
+        new Product
+        {
+            ProductName = "Product 2",
+            Description = "Description for Product 2",
+            Price = 150,
+            QuantityInStock = 30
+        },
+        new Product
+        {
+            ProductName = "Product 3",
+            Description = "Description for Product 3",
+            Price = 200,
+            QuantityInStock = 20
+        }
+    };
+
+            foreach (var product in products)
+            {
+                if (!context.Product.Any(p => p.ProductName == product.ProductName))
+                {
+                    context.Product.Add(product);
+                }
+            }
+
+            await context.SaveChangesAsync();
 
             await context.SaveChangesAsync();
         }
